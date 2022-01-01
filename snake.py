@@ -1,5 +1,6 @@
 import numpy as np
 import random
+import json
 random.seed()
 
 class Snake:
@@ -39,11 +40,11 @@ class Snake:
 		for y in range(12):
 			for x in range(24):
 				self.i2h[y][x] = genes[0][y][x] if random.random() < 0.5 else genes[1][y][x]
-				if random.random() < 0.01: self.i2h[y][x] = random.random()
+				if random.random() < 0.02: self.i2h[y][x] = random.random()
 		for y in range(4):
 			for x in range(12):
 				self.h2o[y][x] = genes[2][y][x] if random.random() < 0.5 else genes[3][y][x]
-				if random.random() < 0.01: self.h2o[y][x] = random.random()
+				if random.random() < 0.02: self.h2o[y][x] = random.random()
 		pass
 
 	def genfood(self):
@@ -133,17 +134,24 @@ class Generation:
 			if fitness > self.best_fitness:
 				self.best_fitness = fitness
 				self.best_snake = snake
-		if self.best_snake:
-			print(f'moves={self.best_snake.moves}, foods={self.best_snake.foods}, fitness={self.best_snake.fitness()}')
 		if snakes_alive == 0: self.regenerate()
 	
 	def regenerate(self):
+		snakes = sorted(self.snakes, key=lambda x: x.fitness())
+		genes = [snakes[-1].i2h, snakes[-2].i2h, snakes[-1].h2o, snakes[-2].h2o]
+		if self.best_snake:
+			print(f'gen={self.generation_count}, moves={self.best_snake.moves}, foods={self.best_snake.foods}, fitness={self.best_snake.fitness()}')
+			if self.generation_count % 10 == 0:
+				fname = f'./logs/{self.generation_count}_{self.best_snake.moves}_{self.best_snake.foods}_{self.best_snake.fitness()}.json'
+				json_dump = json.dumps({'i2h_1': snakes[-1].i2h.tolist(),
+												'i2h_2': snakes[-2].i2h.tolist(),
+												'h2o_1': snakes[-1].h2o.tolist(),
+												'h2o_2': snakes[-2].h2o.tolist()})
+				with open(fname, 'w') as f:
+					f.write(json_dump)
 		self.best_snake = None
 		self.best_fitness = -1.0
 		self.generation_count += 1
-		print(f'new generation: {self.generation_count}')
-		snakes = sorted(self.snakes, key=lambda x: x.fitness())
-		genes = [snakes[-1].i2h, snakes[-2].i2h, snakes[-1].h2o, snakes[-2].h2o]
 		snakes = None
 		self.new(genes)
 
