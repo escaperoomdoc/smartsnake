@@ -40,11 +40,11 @@ class Snake:
 		for y in range(12):
 			for x in range(24):
 				self.i2h[y][x] = genes[0][y][x] if random.random() < 0.5 else genes[1][y][x]
-				if random.random() < 0.02: self.i2h[y][x] = random.random()
+				if random.random() < 0.01: self.i2h[y][x] = random.random()
 		for y in range(4):
 			for x in range(12):
 				self.h2o[y][x] = genes[2][y][x] if random.random() < 0.5 else genes[3][y][x]
-				if random.random() < 0.02: self.h2o[y][x] = random.random()
+				if random.random() < 0.01: self.h2o[y][x] = random.random()
 		pass
 
 	def genfood(self):
