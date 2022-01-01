@@ -53,7 +53,10 @@ while True:
 		for snake in gen.snakes:
 			if not snake.alive: continue
 			for body in snake.body:
-				draw_rect(body[0], body[1], (196, 196, 196))
+				if snake == gen.best_snake:
+					draw_rect(body[0], body[1], (0, 255, 0))
+				else:
+					draw_rect(body[0], body[1], (196, 196, 196))
 			draw_rect(snake.food[0], snake.food[1], (255, 0, 0))
 		# flip buffers
 		pygame.display.flip()
