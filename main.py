@@ -14,12 +14,12 @@ def drawRect(y: int, x: int, color):
 	pygame.draw.rect(screen, color, (x * cell_size - 1, y * cell_size - 1, cell_size - 2, cell_size - 2))
 
 while True:
+	# handle events
+	exit_flag = False
 	for event in pygame.event.get():
-		if event.type == pygame.QUIT:
-			print('exit')
+		if event.type == pygame.QUIT:			
 			pygame.quit()
-			break
-		
+			exit_flag = True
 		if event.type == pygame.KEYDOWN:
 			dir = None
 			if event.key == pygame.K_LEFT: dir = (0, -1)
@@ -29,10 +29,14 @@ while True:
 			if dir:
 				for snake in snakes:
 					snake.move(dir)
+	if exit_flag: break
+	# draw snakes
 	screen.fill(BG_COLOR)
 	for snake in snakes:
 		for body in snake.body:
 			drawRect(body[0], body[1], (196, 196, 196))
 		drawRect(snake.food[0], snake.food[1], (255, 0, 0))
-
+	# flip buffers
 	pygame.display.flip()
+
+print('exit')
