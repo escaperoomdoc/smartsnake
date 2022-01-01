@@ -5,7 +5,7 @@ cell_size = 15
 cells = 40
 BG_COLOR = (0, 0, 0)
 resolution = (cell_size * cells, cell_size * cells)
-fps = 5
+fps = 20
 
 screen = pygame.display.set_mode(resolution)
 clock = pygame.time.Clock()
