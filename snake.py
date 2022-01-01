@@ -111,3 +111,44 @@ class Snake:
 	
 	def fitness(self):
 		return self.moves**2 * 2**min(self.foods, 10) * max(1, self.foods - 9)
+
+
+class Generation:
+	def __init__(self, population=100, cells=40):
+		self.generation_count = 0
+		self.population = population
+		self.cells = cells
+		self.best_snake = None
+		self.best_fitness = -1.0		
+		self.new()
+	
+	def step(self):
+		snakes_alive = 0	
+		for snake in self.snakes:
+			if not snake.alive: continue
+			dir = snake.think()
+			snake.move(dir)
+			if snake.alive:snakes_alive += 1
+			fitness = snake.fitness()
+			if fitness > self.best_fitness:
+				self.best_fitness = fitness
+				self.best_snake = snake
+		if self.best_snake:
+			print(f'moves={self.best_snake.moves}, foods={self.best_snake.foods}, fitness={self.best_snake.fitness()}')
+		if snakes_alive == 0: self.regenerate()
+	
+	def regenerate(self):
+		self.best_snake = None
+		self.best_fitness = -1.0
+		self.generation_count += 1
+		print(f'new generation: {self.generation_count}')
+		snakes = sorted(self.snakes, key=lambda x: x.fitness())
+		genes = [snakes[-1].i2h, snakes[-2].i2h, snakes[-1].h2o, snakes[-2].h2o]
+		snakes = None
+		self.new(genes)
+
+	def new(self, genes=None):
+		self.snakes = []
+		for i in range(self.population):
+			self.snakes.append(Snake(MAX=self.cells, size=5, genes=genes))
+		pass
