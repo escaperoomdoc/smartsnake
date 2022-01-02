@@ -72,7 +72,7 @@ class Snake:
 		candidate = (candidate[0] + dir[0], candidate[1] + dir[1])
 		if (candidate[0] < 0 or candidate[1] < 0 or
 			 candidate[0] >= self.MAX or candidate[1] >= self.MAX or
-			 candidate in self.body or self.moves > 666):
+			 candidate in self.body or self.moves > (200 + self.foods * 100)):
 			 self.alive = False
 			 return
 		self.body.append(candidate)
@@ -141,7 +141,7 @@ class Generation:
 		genes = [snakes[-1].i2h, snakes[-2].i2h, snakes[-1].h2o, snakes[-2].h2o]
 		if self.best_snake:
 			print(f'gen={self.generation_count}, moves={self.best_snake.moves}, foods={self.best_snake.foods}, fitness={self.best_snake.fitness()}')
-			if self.generation_count % 10 == 0:
+			if self.generation_count % 1 == 0:
 				fname = f'./logs/{self.generation_count}_{self.best_snake.moves}_{self.best_snake.foods}_{self.best_snake.fitness()}.json'
 				json_dump = json.dumps({'i2h_1': snakes[-1].i2h.tolist(),
 												'i2h_2': snakes[-2].i2h.tolist(),
