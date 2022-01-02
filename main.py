@@ -1,5 +1,16 @@
 import pygame
+import sys
+import json
 from snake import Snake, Generation
+
+genes = None
+if len(sys.argv) > 1:
+	fname = sys.argv[1]
+	with open(fname, 'r', encoding='utf-8') as f:
+		data = f.read()
+		obj = json.loads(data)
+		genes = [obj['i2h_1'], obj['i2h_2'], obj['h2o_1'], obj['h2o_2']]
+		print(f'genes parsed from file {fname}')
 
 cell_size = 15
 cells = 40
@@ -14,7 +25,7 @@ pygame.display.set_caption('snake')
 def draw_rect(y: int, x: int, color):
 	pygame.draw.rect(screen, color, (x * cell_size - 1, y * cell_size - 1, cell_size - 2, cell_size - 2))
 
-gen = Generation()
+gen = Generation(genes=genes)
 silent_mode = False
 auto_mode = False
 while True:

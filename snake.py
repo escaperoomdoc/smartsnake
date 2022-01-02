@@ -72,7 +72,7 @@ class Snake:
 		candidate = (candidate[0] + dir[0], candidate[1] + dir[1])
 		if (candidate[0] < 0 or candidate[1] < 0 or
 			 candidate[0] >= self.MAX or candidate[1] >= self.MAX or
-			 candidate in self.body):
+			 candidate in self.body or self.moves > 666):
 			 self.alive = False
 			 return
 		self.body.append(candidate)
@@ -115,13 +115,13 @@ class Snake:
 
 
 class Generation:
-	def __init__(self, population=100, cells=40):
+	def __init__(self, population=100, cells=40, genes=None):
 		self.generation_count = 0
 		self.population = population
 		self.cells = cells
 		self.best_snake = None
 		self.best_fitness = -1.0		
-		self.new()
+		self.new(genes)
 	
 	def step(self):
 		snakes_alive = 0	
